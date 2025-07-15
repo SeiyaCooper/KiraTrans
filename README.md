@@ -1,2 +1,2 @@
 # KiraTrans
-A kirakira dokidoki translator.
+A **kirakira☆dokidoki** translator.
