@@ -1,0 +1,31 @@
+{
+    "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
+    "productName": "KiraTrans",
+    "version": "0.0.1",
+    "identifier": "com.seiyacooper.kiratrans",
+    "build": {
+        "frontendDist": "../src/dist/",
+        "devUrl": "http://localhost:1270",
+        "beforeDevCommand": "yarn vite",
+        "beforeBuildCommand": "yarn vite build"
+    },
+    "app": {
+        "windows": [
+            {
+                "title": "KiraTrans",
+                "width": 800,
+                "height": 600,
+                "resizable": true,
+                "fullscreen": false
+            }
+        ],
+        "security": {
+            "csp": null
+        }
+    },
+    "bundle": {
+        "active": true,
+        "targets": "all",
+        "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"]
+    }
+}
