@@ -59,11 +59,15 @@ getStore().then(async (store) => {
         translate();
     };
     store.get("source-language").then((lang) => {
-        sourceLanguage.value = supportLanguages.value.find((langObj) => langObj.code === lang);
+        const storedLanguage = supportLanguages.value.find((langObj) => langObj.code === lang);
+        if (storedLanguage === undefined) return;
+        sourceLanguage.value = storedLanguage;
         sourceLanguageSelector.value?.select(sourceLanguage.value);
     });
     store.get("target-language").then((lang) => {
-        targetLanguage.value = supportLanguages.value.find((langObj) => langObj.code === lang);
+        const storedLanguage = supportLanguages.value.find((langObj) => langObj.code === lang);
+        if (storedLanguage === undefined) return;
+        targetLanguage.value = storedLanguage;
         targetLanguageSelector.value?.select(targetLanguage.value);
     });
 });
