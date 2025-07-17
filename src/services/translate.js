@@ -1,12 +1,14 @@
-export default {
+const TranslateOps = {
     niutrans: {
-        translate: async (sourceText, apikey) => {
+        translate: async (sourceText, apikey, from, to) => {
+            if (sourceText.trim() === "") return sourceText;
+
             const url = "https://api.niutrans.com/v2/text/translate";
             const CryptoJS = await import("crypto-js");
 
             const params = {
-                from: "en",
-                to: "zh",
+                from: TranslateOps.niutrans.getLanguageTag(from),
+                to: TranslateOps.niutrans.getLanguageTag(to),
                 appId: "DQv1750342594631",
                 srcText: sourceText,
                 timestamp: Math.floor(+new Date() / 1000),
@@ -20,8 +22,6 @@ export default {
             }
 
             params.authStr = CryptoJS.MD5(CryptoJS.enc.Utf8.parse(paramArr.join("&"))).toString();
-            console.log(paramArr.join("&"));
-            console.log(CryptoJS.MD5(CryptoJS.enc.Utf8.parse(paramArr.join("&"))).toString());
 
             const responce = await fetch(url, {
                 method: "POST",
@@ -30,8 +30,27 @@ export default {
                 },
                 body: new URLSearchParams(params),
             });
+            const responceContent = await responce.json();
+            if (responceContent.errorMsg) throw new Error(`${responceContent.errorMsg}`);
+            return responceContent;
+        },
 
-            return await responce.json();
+        /**
+         * @param {String} languageCode language code that follows ISO 639 standard, with an unique one "auto"
+         */
+        getLanguageTag(languageCode) {
+            switch (languageCode) {
+                case "zh-cn":
+                    return "zh";
+                case "en":
+                    return "en";
+                case "ja":
+                    return "ja";
+                case "auto":
+                    return "auto";
+            }
         },
     },
 };
+
+export default TranslateOps;

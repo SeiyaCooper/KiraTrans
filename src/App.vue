@@ -7,8 +7,8 @@ import SettingsPage from "./components/SettingsPage.vue";
 <template>
     <TabGroup as="div" class="app-content">
         <TabPanels class="tab-panels">
-            <TabPanel as="template"><TranslationPage></TranslationPage></TabPanel>
-            <TabPanel as="template"><SettingsPage></SettingsPage></TabPanel>
+            <TabPanel as="template" :unmount="false"><TranslationPage></TranslationPage></TabPanel>
+            <TabPanel as="template" :unmount="false"><SettingsPage></SettingsPage></TabPanel>
         </TabPanels>
         <TabList class="tab-list">
             <Tab as="template" #="{ selected }">

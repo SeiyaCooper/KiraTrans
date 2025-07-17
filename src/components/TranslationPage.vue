@@ -1,37 +1,125 @@
 <script setup>
 import TranslateOps from "../services/translate.js";
 import { getStore } from "../services/store.js";
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
+import Toast from "./Toast.vue";
+import LanguageSelector from "./LanguageSelector.vue";
+import { useI18n } from "vue-i18n";
 
-let handleInput = () => {};
+const { t } = useI18n();
 
-let translatedText = ref("");
+let handleInput = ref(() => {});
+let handleSourceLangChange = ref(() => {});
+let handleTargetLangChange = ref(() => {});
+const translatedText = ref("");
+const toastRef = useTemplateRef("toast");
+
+const supportLanguages = ref([
+    { code: "zh-cn", label: t("languages.zh-cn") },
+    { code: "en", label: t("languages.en") },
+    { code: "ja", label: t("languages.ja") },
+]);
+const sourceLanguage = ref(supportLanguages.value[0]);
+const sourceLanguageSelector = useTemplateRef("source-language-selector");
+const targetLanguage = ref(supportLanguages.value[1]);
+const targetLanguageSelector = useTemplateRef("target-language-selector");
+
+const sourceText = ref("");
 
 getStore().then(async (store) => {
     const translateApi = await store.get("translate-api");
     const apiKey = await store.get("translate-api-key");
 
-    handleInput = async (event) => {
-        translatedText.value = await TranslateOps[translateApi].translate(event.target.value, apiKey);
+    const translate = async () => {
+        try {
+            translatedText.value = (
+                await TranslateOps[translateApi].translate(
+                    sourceText.value,
+                    apiKey,
+                    sourceLanguage.value.code,
+                    targetLanguage.value.code
+                )
+            ).tgtText;
+        } catch (error) {
+            toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
+        }
     };
+
+    handleInput.value = translate;
+    handleSourceLangChange.value = async (lang) => {
+        if (sourceLanguage.value.code === lang) return;
+        sourceLanguage.value = lang;
+        store.set("source-language", lang.code);
+        translate();
+    };
+    handleTargetLangChange.value = async (lang) => {
+        if (targetLanguage.value.code === lang.code) return;
+        targetLanguage.value = lang;
+        store.set("target-language", lang.code);
+        translate();
+    };
+    store.get("source-language").then((lang) => {
+        sourceLanguage.value = supportLanguages.value.find((langObj) => langObj.code === lang);
+        sourceLanguageSelector.value?.select(sourceLanguage.value);
+    });
+    store.get("target-language").then((lang) => {
+        targetLanguage.value = supportLanguages.value.find((langObj) => langObj.code === lang);
+        targetLanguageSelector.value?.select(targetLanguage.value);
+    });
 });
 </script>
 
 <template>
-    <div class="container">
-        <textarea @input="handleInput" class="source-text text-view"></textarea>
-        <p class="translated-text text-view">{{ translatedText }}</p>
+    <div class="translation-page-container">
+        <div class="language-select-section">
+            <LanguageSelector
+                :languages="supportLanguages"
+                :selected="sourceLanguage"
+                @change="handleSourceLangChange"
+                ref="source-language-selector"
+            ></LanguageSelector>
+            <LanguageSelector
+                :languages="supportLanguages"
+                :selected="targetLanguage"
+                @change="handleTargetLangChange"
+                ref="target-language-selector"
+            ></LanguageSelector>
+        </div>
+        <div class="translation-page-main-content">
+            <textarea v-model="sourceText" @input="handleInput" class="source-text text-view"></textarea>
+            <pre class="translated-text text-view">{{ translatedText }}</pre>
+        </div>
+        <Toast ref="toast"></Toast>
     </div>
 </template>
 
 <style scoped>
-.container {
+.translation-page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.language-select-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 60px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.translation-page-main-content {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
     width: 100%;
-    height: 100%;
+    flex: 1;
 }
 
 .text-view {
@@ -42,14 +130,14 @@ getStore().then(async (store) => {
     box-sizing: border-box;
     color: var(--text-color);
     font-size: 1rem;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: var(--font-family);
     border-radius: 10px;
     border: 1px solid var(--border-color-secondary);
     background-color: var(--card-color);
 }
 
 @media (max-width: 600px) {
-    .container {
+    .translation-page-main-content {
         flex-direction: column;
     }
 
@@ -63,7 +151,12 @@ getStore().then(async (store) => {
     resize: none;
     outline: none;
 }
+
 .source-text:focus {
     border: 1px solid var(--border-color);
+}
+
+.translated-text {
+    overflow: auto;
 }
 </style>

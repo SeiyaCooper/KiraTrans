@@ -17,6 +17,12 @@ export default createI18n({
             },
             common: {
                 submit: "确认",
+                error: "错误",
+            },
+            languages: {
+                "zh-cn": "中文（简体）",
+                en: "英语",
+                ja: "日语",
             },
         },
         en: {
@@ -26,6 +32,10 @@ export default createI18n({
             },
             apis: {
                 niutrans: "NiuTrans",
+            },
+            common: {
+                submit: "Submit",
+                error: "Error",
             },
         },
     },

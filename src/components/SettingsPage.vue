@@ -6,24 +6,31 @@ import { getStore } from "../services/store.js";
 
 const { t } = useI18n();
 const translateApis = [{ name: "niutrans", label: t("apis.niutrans") }];
-
 const translateApi = ref(translateApis[0]);
 
 let apiKey = "";
+let apiKeyPlaceHolder = ref("aascas");
 
 async function handleApiKeySubmit() {
     const store = await getStore();
     store.set("translate-api-key", apiKey);
+    apiKeyPlaceHolder.value = "*".repeat(apiKey.length);
 }
 
 async function handleApiChoose() {
     const store = await getStore();
     await store.set("translate-api", translateApi.value.name);
 }
+
+(async function loadSettings() {
+    const store = await getStore();
+    const apiKey = await store.get("translate-api-key");
+    if (apiKey) apiKeyPlaceHolder.value = "*".repeat(apiKey.length);
+})();
 </script>
 
 <template>
-    <div class="container">
+    <div class="settings-page-container">
         <div class="card">
             <p class="text">{{ $t("apis.chooseNotice") }}</p>
             <Listbox v-model="translateApi">
@@ -35,7 +42,6 @@ async function handleApiChoose() {
                     <ListboxOption
                         class="list-box-option"
                         as="template"
-                        v-slot="{ active, selected }"
                         v-for="api in translateApis"
                         :key="api.name"
                         :value="api"
@@ -46,7 +52,12 @@ async function handleApiChoose() {
             </Listbox>
             <p class="text">{{ $t("apis.setApiKeyNotice") }}</p>
             <form class="inner-card form" @submit.prevent="handleApiKeySubmit">
-                <input v-model="apiKey" @submit="handleApiKeySubmit" class="form-input" />
+                <input
+                    v-model="apiKey"
+                    @submit="handleApiKeySubmit"
+                    class="form-input"
+                    :placeholder="apiKeyPlaceHolder"
+                />
                 <button type="submit" class="form-btn">{{ $t("common.submit") }}</button>
             </form>
         </div>
@@ -58,7 +69,7 @@ async function handleApiChoose() {
     color: var(--text-color);
 }
 
-.container {
+.settings-page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
