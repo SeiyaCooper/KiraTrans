@@ -42,13 +42,19 @@ defineExpose({ select });
 }
 
 .language-selector-btn {
-    width: 400px;
+    width: 45vw;
     height: 50px;
     padding: 0;
     color: var(--text-color);
     background-color: var(--card-color);
     border-radius: 10px;
     border: 1px solid var(--border-color-secondary);
+}
+
+@media (max-width: 600px) {
+    .language-selector-btn {
+        width: 40vw;
+    }
 }
 
 .language-selector-panel {
