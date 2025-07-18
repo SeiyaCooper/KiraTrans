@@ -1,10 +1,11 @@
-<script setup>
+<script lang="js" setup>
 import TranslateOps from "../services/translate.js";
 import { getStore } from "../services/store.js";
 import { ref, useTemplateRef } from "vue";
 import Toast from "./Toast.vue";
 import LanguageSelector from "./LanguageSelector.vue";
 import { useI18n } from "vue-i18n";
+import { listen } from "@tauri-apps/api/event";
 
 const { t } = useI18n();
 
@@ -12,6 +13,7 @@ let handleInput = ref(() => {});
 let handleSourceLangChange = ref(() => {});
 let handleTargetLangChange = ref(() => {});
 const translatedText = ref("");
+const sourceText = ref("");
 const toastRef = useTemplateRef("toast");
 
 const supportLanguages = ref([
@@ -24,26 +26,28 @@ const sourceLanguageSelector = useTemplateRef("source-language-selector");
 const targetLanguage = ref(supportLanguages.value[1]);
 const targetLanguageSelector = useTemplateRef("target-language-selector");
 
-const sourceText = ref("");
+let translateApi = undefined;
+let apiKey = undefined;
+
+const translate = async () => {
+    console.log("translate fired");
+    try {
+        translatedText.value = (
+            await TranslateOps[translateApi].translate(
+                sourceText.value,
+                apiKey,
+                sourceLanguage.value.code,
+                targetLanguage.value.code
+            )
+        ).tgtText;
+    } catch (error) {
+        toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
+    }
+};
 
 getStore().then(async (store) => {
-    const translateApi = await store.get("translate-api");
-    const apiKey = await store.get("translate-api-key");
-
-    const translate = async () => {
-        try {
-            translatedText.value = (
-                await TranslateOps[translateApi].translate(
-                    sourceText.value,
-                    apiKey,
-                    sourceLanguage.value.code,
-                    targetLanguage.value.code
-                )
-            ).tgtText;
-        } catch (error) {
-            toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
-        }
-    };
+    translateApi = await store.get("translate-api");
+    apiKey = await store.get("translate-api-key");
 
     handleInput.value = translate;
     handleSourceLangChange.value = async (lang) => {
@@ -70,6 +74,11 @@ getStore().then(async (store) => {
         targetLanguage.value = storedLanguage;
         targetLanguageSelector.value?.select(targetLanguage.value);
     });
+});
+
+listen("window-unminimize", (event) => {
+    sourceText.value = event.payload;
+    translate();
 });
 </script>
 

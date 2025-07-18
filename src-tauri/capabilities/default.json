@@ -1,7 +1,17 @@
 {
-    "$schema": "../gen/schemas/desktop-schema.json",
-    "identifier": "default",
-    "description": "enables the default permissions",
-    "windows": ["main"],
-    "permissions": ["core:default", "store:allow-get", "store:allow-set", "store:allow-save", "store:allow-load"]
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "enables the default permissions",
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:default",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-save",
+    "store:allow-load",
+    "clipboard-manager:default",
+    "clipboard-manager:default"
+  ]
 }
