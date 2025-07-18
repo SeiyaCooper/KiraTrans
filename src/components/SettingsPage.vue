@@ -9,7 +9,7 @@ const translateApis = [{ name: "niutrans", label: t("apis.niutrans") }];
 const translateApi = ref(translateApis[0]);
 
 let apiKey = "";
-let apiKeyPlaceHolder = ref("aascas");
+let apiKeyPlaceHolder = ref("");
 
 async function handleApiKeySubmit() {
     const store = await getStore();

@@ -1,7 +1,9 @@
 :root {
+    --prime: #fe63a1;
+
     --background-color: #121215;
     --card-color: #1e1e21;
-    --border-color: #fe63a1;
+    --border-color: var(--prime);
     --border-color-secondary: #333333;
     --text-color: aliceblue;
 
@@ -13,4 +15,18 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: var(--background-color);
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--prime);
+    border-radius: 10px;
 }
