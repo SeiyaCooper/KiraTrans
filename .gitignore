@@ -25,3 +25,6 @@ dist-ssr
 
 # Vue compiler
 src/vue-global-types.d.ts
+
+# Android keystore
+keystore.properties
