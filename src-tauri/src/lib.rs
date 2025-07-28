@@ -1,7 +1,18 @@
+use tauri::{AppHandle, Manager};
+
+fn display_main_window(app: &AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        let _ = window.set_skip_taskbar(false);
+        let _ = window.show();
+        let _ = window.unminimize();
+        let _ = window.set_focus();
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
-        .plugin(tauri_plugin_clipboard_manager::init())
+    let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
@@ -11,14 +22,11 @@ pub fn run() {
                 )?;
             }
 
-            app.handle()
-                .plugin(tauri_plugin_store::Builder::default().build())?;
-
             #[cfg(desktop)]
             {
                 use tauri::menu::{Menu, MenuItem};
                 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
-                use tauri::{AppHandle, Emitter, Manager, WindowEvent};
+                use tauri::{Emitter, Manager, WindowEvent};
                 use tauri_plugin_clipboard_manager::ClipboardExt;
                 use tauri_plugin_global_shortcut::ShortcutState;
 
@@ -27,34 +35,12 @@ pub fn run() {
                 window.on_window_event(move |event| match event {
                     WindowEvent::CloseRequested { api, .. } => {
                         api.prevent_close();
+                        let _ = window_clone.minimize();
                         let _ = window_clone.hide();
                         let _ = window_clone.set_skip_taskbar(true);
                     }
                     _ => {}
                 });
-
-                fn display_main_window(app: &AppHandle) {
-                    if let Some(window) = app.get_webview_window("main") {
-                        let _ = window.set_skip_taskbar(false);
-                        let _ = window.show();
-                        let _ = window.unminimize();
-                        let _ = window.set_focus();
-                    }
-                }
-
-                app.handle().plugin(
-                    tauri_plugin_global_shortcut::Builder::new()
-                        .with_shortcut("CommandOrControl+Shift+C")?
-                        .with_handler(|app, _shortcut, event| {
-                            if event.state == ShortcutState::Pressed {
-                                if let Ok(text) = app.clipboard().read_text() {
-                                    display_main_window(app);
-                                    app.emit("window-unminimize", text).unwrap();
-                                }
-                            }
-                        })
-                        .build(),
-                )?;
 
                 let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)?;
                 let menu = Menu::with_items(app, &[&quit_item])?;
@@ -84,10 +70,42 @@ pub fn run() {
                     })
                     .icon(app.default_window_icon().unwrap().clone())
                     .build(app)?;
+
+                // Gets error when using with single-instance
+                let _ = app.handle().plugin(
+                    tauri_plugin_global_shortcut::Builder::new()
+                        .with_shortcut("CommandOrControl+Shift+C")
+                        .unwrap()
+                        .with_handler(|app, _shortcut, event| {
+                            if event.state == ShortcutState::Pressed {
+                                if let Ok(text) = app.clipboard().read_text() {
+                                    display_main_window(app);
+                                    app.emit("window-unminimize", text).unwrap();
+                                }
+                            }
+                        })
+                        .build(),
+                );
             }
 
             Ok(())
-        })
+        });
+
+    #[cfg(desktop)]
+    {
+        builder = builder
+            .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+                display_main_window(app);
+            }))
+            .plugin(
+                tauri_plugin_autostart::Builder::new()
+                    .app_name("KiraTrans")
+                    .build(),
+            )
+            .plugin(tauri_plugin_clipboard_manager::init());
+    }
+
+    builder
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
