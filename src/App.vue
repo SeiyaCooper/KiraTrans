@@ -1,5 +1,6 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { Languages, Settings } from "lucide-vue-next";
 import TranslationPage from "./components/TranslationPage.vue";
 import SettingsPage from "./components/SettingsPage.vue";
 </script>
@@ -12,10 +13,14 @@ import SettingsPage from "./components/SettingsPage.vue";
         </TabPanels>
         <TabList class="tab-list">
             <Tab as="template" #="{ selected }">
-                <button :class="['tab', { selected }]">{{ $t("pages.translation") }}</button>
+                <button :class="['tab', { selected }]">
+                    <Languages class="icon"></Languages><span>{{ $t("pages.translation") }}</span>
+                </button>
             </Tab>
             <Tab as="template" #="{ selected }">
-                <button :class="['tab', { selected }]">{{ $t("pages.settings") }}</button>
+                <button :class="['tab', { selected }]">
+                    <Settings class="icon"></Settings><span>{{ $t("pages.settings") }}</span>
+                </button>
             </Tab>
         </TabList>
     </TabGroup>
@@ -43,6 +48,10 @@ import SettingsPage from "./components/SettingsPage.vue";
 }
 
 .tab {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
     flex: 1;
     position: relative;
     height: 75px;
@@ -64,6 +73,14 @@ import SettingsPage from "./components/SettingsPage.vue";
     height: 3px;
     background-color: var(--border-color);
     transition: width 0.1s;
+}
+
+.tab > .icon {
+    transition: color 0.1s ease;
+}
+
+.tab.selected > .icon {
+    color: var(--prime);
 }
 
 .tab.selected::after {

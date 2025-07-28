@@ -13,6 +13,7 @@
         "@tauri-apps/plugin-global-shortcut": "^2.3.0",
         "@tauri-apps/plugin-store": "^2.3.0",
         "crypto-js": "^4.2.0",
+        "lucide-vue-next": "^0.528.0",
         "vue": "^3.5.13",
         "vue-i18n": "11",
         "vue-router": "^4.5.0"
