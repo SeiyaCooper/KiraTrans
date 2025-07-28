@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from "@headlessui/vue";
+import { ChevronDown } from "lucide-vue-next";
 import { ref } from "vue";
 import { getStore } from "../services/store.js";
 
@@ -36,7 +37,7 @@ async function handleApiChoose() {
             <Listbox v-model="translateApi">
                 <ListboxButton class="list-box-btn inner-card">
                     <span class="list-box-btn-text">{{ translateApi.label }}</span>
-                    <span class="list-box-btn-icon">🐲</span>
+                    <span class="list-box-btn-icon"><ChevronDown></ChevronDown></span>
                 </ListboxButton>
                 <ListboxOptions class="list-box-options">
                     <ListboxOption
@@ -66,7 +67,7 @@ async function handleApiChoose() {
 
 <style scoped>
 .text {
-    color: var(--text-color);
+    color: var(--content-common);
 }
 
 .settings-page-container {
@@ -78,8 +79,8 @@ async function handleApiChoose() {
 .card {
     box-sizing: border-box;
     width: 90%;
-    background-color: var(--card-color);
-    border: 1px solid var(--border-color-secondary);
+    background-color: var(--background-light-0);
+    border: 1px solid var(--background-light-1);
     border-radius: 10px;
     margin: 20px;
     padding: 10px;
@@ -88,9 +89,9 @@ async function handleApiChoose() {
 
 .inner-card {
     width: 100%;
-    color: var(--text-color);
-    background-color: var(--background-color);
-    border: 1px solid var(--border-color-secondary);
+    color: var(--content-common);
+    background-color: var(--background);
+    border: 1px solid var(--background-light-1);
     border-radius: 10px;
 }
 
@@ -142,14 +143,14 @@ async function handleApiChoose() {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border: none;
-    border-right: 1px solid var(--border-color-secondary);
-    color: var(--text-color);
-    background-color: var(--background-color);
+    border-right: 1px solid var(--background-light-1);
+    color: var(--content-common);
+    background-color: var(--background);
     outline: none;
 }
 
 .form-input:focus {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--prime);
 }
 
 .form-btn {
@@ -158,13 +159,13 @@ async function handleApiChoose() {
     position: absolute;
     right: 0;
     border: none;
-    color: var(--text-color);
+    color: var(--content-common);
     background-color: transparent;
 }
 
 .form-btn:hover {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--prime);
 }
 </style>

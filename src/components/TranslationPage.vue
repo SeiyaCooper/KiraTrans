@@ -141,12 +141,12 @@ listen("window-unminimize", (event) => {
     margin: 0;
     padding: 10px;
     box-sizing: border-box;
-    color: var(--text-color);
+    color: var(--content-common);
     font-size: 1rem;
     font-family: var(--font-family);
     border-radius: 10px;
-    border: 1px solid var(--border-color-secondary);
-    background-color: var(--card-color);
+    border: 1px solid var(--background-light-1);
+    background-color: var(--background-light-0);
 }
 
 @media (max-width: 600px) {
@@ -166,7 +166,7 @@ listen("window-unminimize", (event) => {
 }
 
 .source-text:focus {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--prime);
 }
 
 .translated-text {

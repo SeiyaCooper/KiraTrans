@@ -1,12 +1,4 @@
 :root {
-    --prime: #fe63a1;
-
-    --background-color: #121215;
-    --card-color: #1e1e21;
-    --border-color: var(--prime);
-    --border-color-secondary: #333333;
-    --text-color: aliceblue;
-
     --font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -14,7 +6,7 @@ body {
     margin: 0;
     width: 100vw;
     height: 100vh;
-    background-color: var(--background-color);
+    background-color: var(--background);
 }
 
 ::-webkit-scrollbar {

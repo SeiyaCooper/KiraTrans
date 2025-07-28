@@ -45,10 +45,10 @@ defineExpose({ select });
     width: 45vw;
     height: 50px;
     padding: 0;
-    color: var(--text-color);
-    background-color: var(--card-color);
+    color: var(--content-common);
+    background-color: var(--background-light-0);
     border-radius: 10px;
-    border: 1px solid var(--border-color-secondary);
+    border: 1px solid var(--background-light-1);
 }
 
 @media (max-width: 600px) {
@@ -71,8 +71,8 @@ defineExpose({ select });
     margin-top: 10px;
     padding: 5px;
     border-radius: 10px;
-    border: 1px solid var(--border-color-secondary);
-    background-color: var(--card-color);
+    border: 1px solid var(--background-light-1);
+    background-color: var(--background-light-0);
 }
 
 .language-label {
@@ -80,8 +80,8 @@ defineExpose({ select });
     margin-bottom: 5px;
     padding: 5px;
     border-radius: 10px;
-    border: 1px solid var(--border-color-secondary);
-    background-color: var(--background-color);
-    color: var(--text-color);
+    border: 1px solid var(--background-light-1);
+    background-color: var(--background);
+    color: var(--content-common);
 }
 </style>

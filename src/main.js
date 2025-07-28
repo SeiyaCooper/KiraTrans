@@ -1,7 +1,28 @@
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./assets/main.css";
 import i18n from "./i18n/main.js";
+import tinycolor from "tinycolor2";
+
+const COLORS = {
+    prime: "#fe63a1",
+    "content-common": "#f0f8ff",
+    background: "#121215",
+};
+
+for (const [name, color] of Object.entries(COLORS)) {
+    attachColorMap(name, tinycolor(color));
+}
+
+function attachColorMap(name, color) {
+    const root = document.documentElement;
+
+    root.style.setProperty(`--${name}`, color.toString());
+
+    for (let i = 0; i < 4; i++) {
+        root.style.setProperty(`--${name}-light-${i}`, color.brighten(5 * (i + 1)).toString());
+        root.style.setProperty(`--${name}-dark-${i}`, color.darken(5 * (i + 1)).toString());
+    }
+}
 
 const app = createApp(App);
 

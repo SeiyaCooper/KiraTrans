@@ -48,13 +48,13 @@ defineExpose({ openToast });
     max-height: 180px;
     overflow: auto;
     overflow-wrap: normal;
-    background-color: var(--card-color);
+    background-color: var(--background-light-0);
     border-radius: 10px;
-    border: 3px solid var(--border-color);
+    border: 3px solid var(--prime);
 }
 
 .title {
-    color: var(--text-color);
+    color: var(--content-common);
     margin: 0;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -63,13 +63,13 @@ defineExpose({ openToast });
     text-align: center;
     font-size: 1.15rem;
     font-weight: bold;
-    border-bottom: 1px solid var(--border-color-secondary);
+    border-bottom: 1px solid var(--background-light-1);
 }
 
 .content {
     width: fit-content;
     height: fit-content;
-    color: var(--text-color);
+    color: var(--content-common);
     margin: 5px;
     font-family: var(--font-family);
 }

@@ -44,7 +44,7 @@ import SettingsPage from "./components/SettingsPage.vue";
     position: absolute;
     bottom: 0;
     box-sizing: border-box;
-    border-top: 3px solid var(--border-color);
+    border-top: 3px solid var(--prime);
 }
 
 .tab {
@@ -57,10 +57,10 @@ import SettingsPage from "./components/SettingsPage.vue";
     height: 75px;
     border: none;
     outline: none;
-    color: var(--text-color);
+    color: var(--content-common);
     font-size: 1.15rem;
     font-weight: bold;
-    background-color: var(--card-color);
+    background-color: var(--background-light-0);
 }
 
 .tab::after {
@@ -71,7 +71,7 @@ import SettingsPage from "./components/SettingsPage.vue";
     transform: translateX(-50%);
     width: 0;
     height: 3px;
-    background-color: var(--border-color);
+    background-color: var(--prime);
     transition: width 0.1s;
 }
 
