@@ -2,8 +2,8 @@
 import TranslateOps from "../services/translate.js";
 import { getStore } from "../services/store.js";
 import { ref, useTemplateRef } from "vue";
-import Toast from "./Toast.vue";
-import LanguageSelector from "./LanguageSelector.vue";
+import Toast from "../components/Toast.vue";
+import LanguageSelector from "../components/LanguageSelector.vue";
 import { useI18n } from "vue-i18n";
 import { listen } from "@tauri-apps/api/event";
 

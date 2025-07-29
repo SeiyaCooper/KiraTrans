@@ -1,89 +1,75 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { Languages, Settings } from "lucide-vue-next";
-import TranslationPage from "./components/TranslationPage.vue";
-import SettingsPage from "./components/SettingsPage.vue";
+import { RouterView, RouterLink } from "vue-router";
 </script>
 
 <template>
-    <TabGroup as="div" class="app-content">
-        <TabPanels class="tab-panels">
-            <TabPanel as="template" :unmount="false"><TranslationPage></TranslationPage></TabPanel>
-            <TabPanel as="template" :unmount="false"><SettingsPage></SettingsPage></TabPanel>
-        </TabPanels>
-        <TabList class="tab-list">
-            <Tab as="template" #="{ selected }">
-                <button :class="['tab', { selected }]">
-                    <Languages class="icon"></Languages><span>{{ $t("pages.translation") }}</span>
-                </button>
-            </Tab>
-            <Tab as="template" #="{ selected }">
-                <button :class="['tab', { selected }]">
-                    <Settings class="icon"></Settings><span>{{ $t("pages.settings") }}</span>
-                </button>
-            </Tab>
-        </TabList>
-    </TabGroup>
+    <main class="main-content">
+        <RouterView></RouterView>
+    </main>
+    <footer class="footer">
+        <RouterLink to="/translation" class="nav-btn" exact-active-class="selected">
+            <Languages class="icon"></Languages>
+            <span class="nav-btn-text">{{ $t("pages.translation") }}</span>
+        </RouterLink>
+        <RouterLink to="/settings" class="nav-btn" exact-active-class="selected">
+            <Settings class="icon"></Settings>
+            <span class="nav-btn-text">{{ $t("pages.settings") }}</span>
+        </RouterLink>
+    </footer>
 </template>
 
 <style scoped>
-.app-content {
-    flex-direction: column;
-    width: 100vw;
-    height: 100vh;
+.main-content {
+    flex-grow: 1;
 }
 
-.tab-panels {
-    width: 100vw;
-    height: calc(100vh - 75px);
-}
-
-.tab-list {
+.footer {
     display: flex;
-    width: 100vw;
-    position: absolute;
-    bottom: 0;
-    box-sizing: border-box;
-    border-top: 3px solid var(--prime);
-}
-
-.tab {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
-    flex: 1;
-    position: relative;
-    height: 75px;
-    border: none;
-    outline: none;
-    color: var(--content-common);
-    font-size: 1.15rem;
-    font-weight: bold;
+    justify-content: space-around;
+    height: 65px;
     background-color: var(--background-light-0);
 }
 
-.tab::after {
-    content: "";
-    position: absolute;
-    bottom: 3px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 3px;
-    background-color: var(--prime);
-    transition: width 0.1s;
+.nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 20%;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
-.tab > .icon {
-    transition: color 0.1s ease;
+.nav-btn:hover {
+    background-color: var(--background-light-1);
 }
 
-.tab.selected > .icon {
+.icon {
+    color: var(--content-common);
+    transition:
+        color 0.3s ease,
+        transform 0.3s ease;
+}
+
+.nav-btn.selected > .icon {
     color: var(--prime);
+    transform: translateY(-25%);
 }
 
-.tab.selected::after {
-    width: 80%;
+.nav-btn-text {
+    height: 20%;
+    font-size: 0.75rem;
+    color: var(--content-common);
+    transition: color 0.3s ease;
+}
+
+.nav-btn.selected > .nav-btn-text {
+    color: var(--prime);
 }
 </style>

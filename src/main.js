@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import i18n from "./i18n/main.js";
 import tinycolor from "tinycolor2";
+import router from "./router/main.js";
 
 const COLORS = {
     prime: "#fe63a1",
@@ -26,5 +27,6 @@ function attachColorMap(name, color) {
 
 const app = createApp(App);
 
+app.use(router);
 app.use(i18n);
 app.mount(document.body);

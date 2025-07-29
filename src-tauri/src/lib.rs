@@ -27,6 +27,7 @@ pub fn run() {
                 use tauri::menu::{Menu, MenuItem};
                 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
                 use tauri::{Emitter, Manager, WindowEvent};
+                use tauri_plugin_autostart::ManagerExt;
                 use tauri_plugin_clipboard_manager::ClipboardExt;
                 use tauri_plugin_global_shortcut::ShortcutState;
 
@@ -70,6 +71,9 @@ pub fn run() {
                     })
                     .icon(app.default_window_icon().unwrap().clone())
                     .build(app)?;
+
+                let autostart_manager = app.autolaunch();
+                let _ = autostart_manager.enable();
 
                 // Gets error when using with single-instance
                 let _ = app.handle().plugin(
