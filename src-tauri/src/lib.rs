@@ -1,5 +1,7 @@
+#[cfg(desktop)]
 use tauri::{AppHandle, Manager};
 
+#[cfg(desktop)]
 fn display_main_window(app: &AppHandle) {
     if let Some(window) = app.get_webview_window("main") {
         let _ = window.set_skip_taskbar(false);
@@ -11,7 +13,9 @@ fn display_main_window(app: &AppHandle) {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    let mut builder = tauri::Builder::default()
+    let mut builder = tauri::Builder::default();
+
+    builder = builder
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
