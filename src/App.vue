@@ -1,7 +1,13 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { Languages, Settings } from "lucide-vue-next";
-import { RouterView, RouterLink } from "vue-router";
+import { computed } from "vue";
+import { RouterView, RouterLink, useRoute } from "vue-router";
+
+const route = useRoute();
+const showNav = computed(() => {
+    return route.path === "/translation" || route.path === "/settings";
+});
 </script>
 
 <template>
@@ -10,16 +16,18 @@ import { RouterView, RouterLink } from "vue-router";
             <Transition name="fade"><component :is="Component"></component></Transition>
         </RouterView>
     </main>
-    <footer class="footer">
-        <RouterLink to="/translation" class="nav-btn" exact-active-class="selected">
-            <Languages class="icon"></Languages>
-            <span class="nav-btn-text">{{ $t("pages.translation") }}</span>
-        </RouterLink>
-        <RouterLink to="/settings" class="nav-btn" exact-active-class="selected">
-            <Settings class="icon"></Settings>
-            <span class="nav-btn-text">{{ $t("pages.settings") }}</span>
-        </RouterLink>
-    </footer>
+    <Transition name="nav-bar">
+        <footer v-if="showNav" class="footer">
+            <RouterLink to="/translation" class="nav-btn" exact-active-class="selected">
+                <Languages class="icon"></Languages>
+                <span class="nav-btn-text">{{ $t("pages.translation") }}</span>
+            </RouterLink>
+            <RouterLink to="/settings" class="nav-btn" exact-active-class="selected">
+                <Settings class="icon"></Settings>
+                <span class="nav-btn-text">{{ $t("pages.settings.name") }}</span>
+            </RouterLink>
+        </footer>
+    </Transition>
 </template>
 
 <style scoped>
@@ -94,5 +102,15 @@ import { RouterView, RouterLink } from "vue-router";
 .fade-leave-to {
     opacity: 0;
     transform: scale(75%);
+}
+
+.nav-bar-enter-active,
+.nav-bar-leave-active {
+    transition: transform 0.3s ease;
+}
+
+.nav-bar-enter-from,
+.nav-bar-leave-to {
+    transform: translateY(110%);
 }
 </style>

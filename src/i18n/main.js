@@ -7,7 +7,10 @@ export default createI18n({
     messages: {
         "zh-cn": {
             pages: {
-                settings: "设置",
+                settings: {
+                    name: "设置",
+                    translation: "翻译设置",
+                },
                 translation: "翻译",
             },
             apis: {
@@ -27,7 +30,9 @@ export default createI18n({
         },
         en: {
             pages: {
-                settings: "Settings",
+                settings: {
+                    neme: "Settings",
+                },
                 translation: "Translate",
             },
             apis: {
