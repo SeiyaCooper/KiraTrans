@@ -6,7 +6,9 @@ import { RouterView, RouterLink } from "vue-router";
 
 <template>
     <main class="main-content">
-        <RouterView></RouterView>
+        <RouterView v-slot="{ Component }">
+            <Transition name="fade"><component :is="Component"></component></Transition>
+        </RouterView>
     </main>
     <footer class="footer">
         <RouterLink to="/translation" class="nav-btn" exact-active-class="selected">
@@ -23,6 +25,11 @@ import { RouterView, RouterLink } from "vue-router";
 <style scoped>
 .main-content {
     flex-grow: 1;
+    position: relative;
+}
+
+.main-content > * {
+    position: absolute;
 }
 
 .footer {
@@ -44,10 +51,13 @@ import { RouterView, RouterLink } from "vue-router";
     border-radius: 5px;
     transition: background-color 0.3s ease;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.nav-btn:hover {
-    background-color: var(--background-light-1);
+@media (pointer: fine) {
+    .nav-btn:hover {
+        background-color: var(--background-light-1);
+    }
 }
 
 .icon {
@@ -71,5 +81,18 @@ import { RouterView, RouterLink } from "vue-router";
 
 .nav-btn.selected > .nav-btn-text {
     color: var(--prime);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+    transform: scale(75%);
 }
 </style>
