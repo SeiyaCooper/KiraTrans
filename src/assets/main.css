@@ -14,17 +14,6 @@ body {
     overflow: hidden;
 }
 
-/* The back button displayed on desktop deivces */
-.desktop-back-bar {
-    display: none;
-}
-
-@media (pointer: fine) {
-    .desktop-back-bar {
-        display: block;
-    }
-}
-
 ::-webkit-scrollbar {
     width: 5px;
 }

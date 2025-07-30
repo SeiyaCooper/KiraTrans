@@ -11,6 +11,7 @@ const showNav = computed(() => {
 </script>
 
 <template>
+    <div class="status-bar-space"></div>
     <main class="main-content">
         <RouterView v-slot="{ Component }">
             <Transition name="fade"><component :is="Component"></component></Transition>
@@ -31,6 +32,18 @@ const showNav = computed(() => {
 </template>
 
 <style scoped>
+.status-bar-space {
+    height: 30px;
+    background-color: transparent;
+}
+
+/* Don't leave a space for immersive status bar on desktop devices */
+@media (pointer: fine) {
+    .status-bar-space {
+        display: none;
+    }
+}
+
 .main-content {
     flex-grow: 1;
     position: relative;

@@ -22,6 +22,15 @@ function goBack() {
     width: 100%;
     height: 50px;
     border-bottom: 1px solid var(--background-light-1);
+
+    /* The back button is only displayed on desktop deivces */
+    display: none;
+}
+
+@media (pointer: fine) {
+    .back-bar-container {
+        display: block;
+    }
 }
 
 .back-bar-btn {
