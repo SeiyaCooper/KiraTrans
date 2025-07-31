@@ -29,20 +29,24 @@ const targetLanguageSelector = useTemplateRef("target-language-selector");
 let translateApi = undefined;
 let apiKey = undefined;
 
-const translate = async () => {
-    console.log("translate fired");
-    try {
-        translatedText.value = (
-            await TranslateOps[translateApi].translate(
-                sourceText.value,
-                apiKey,
-                sourceLanguage.value.code,
-                targetLanguage.value.code
-            )
-        ).tgtText;
-    } catch (error) {
-        toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
-    }
+let debouncer = undefined;
+const translate = () => {
+    if (debouncer !== undefined) clearTimeout(debouncer);
+
+    debouncer = setTimeout(async () => {
+        try {
+            translatedText.value = (
+                await TranslateOps[translateApi].translate(
+                    sourceText.value,
+                    apiKey,
+                    sourceLanguage.value.code,
+                    targetLanguage.value.code
+                )
+            ).tgtText;
+        } catch (error) {
+            toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
+        }
+    }, 500);
 };
 
 getStore().then(async (store) => {
