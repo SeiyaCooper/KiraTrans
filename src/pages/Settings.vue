@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import { ChevronRight } from "lucide-vue-next";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+const settingOptions = ["common", "translation", "theme"];
 </script>
 
 <template>
     <div class="settings-page-container">
-        <button class="settings-enter" @click="$router.push('/settings/translation')">
-            <span class="settings-enter-text">{{ $t("pages.settings.translation") }}</span>
+        <button v-for="option in settingOptions" class="settings-enter" @click="$router.push(`/settings/${option}`)">
+            <span class="settings-enter-text">{{ $t(`pages.settings.${option}`) }}</span>
             <ChevronRight class="settings-enter-icon"></ChevronRight>
         </button>
     </div>
@@ -34,6 +39,13 @@ import { ChevronRight } from "lucide-vue-next";
     line-height: 50px;
     color: var(--content-common);
     font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+@media (pointer: fine) {
+    .settings-enter:hover > * {
+        color: var(--prime);
+    }
 }
 
 .settings-enter-icon {
@@ -42,5 +54,6 @@ import { ChevronRight } from "lucide-vue-next";
     position: absolute;
     right: 20px;
     color: var(--content-common);
+    transition: color 0.3s ease;
 }
 </style>

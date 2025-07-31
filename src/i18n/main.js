@@ -10,6 +10,8 @@ export default createI18n({
                 settings: {
                     name: "设置",
                     translation: "翻译设置",
+                    common: "应用设置",
+                    theme: "主题设置",
                 },
                 translation: "翻译",
             },
