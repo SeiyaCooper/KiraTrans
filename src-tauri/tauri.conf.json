@@ -21,7 +21,7 @@
             }
         ],
         "security": {
-            "csp": null,
+            "csp": "http://asset.localhost",
             "capabilities": [
                 {
                     "identifier": "screen-area-selection",

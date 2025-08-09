@@ -1,11 +1,14 @@
-<script lang="js" setup>
+<script setup>
 import TranslateOps from "../services/translate.js";
 import { getStore } from "../services/store.js";
-import { ref, useTemplateRef } from "vue";
+import { ref, useTemplateRef, watch } from "vue";
 import Toast from "../components/Toast.vue";
 import LanguageSelector from "../components/LanguageSelector.vue";
 import { useI18n } from "vue-i18n";
-import { listen } from "@tauri-apps/api/event";
+
+const { defaultSourceText = "" } = defineProps({
+    defaultSourceText: String,
+});
 
 const { t } = useI18n();
 
@@ -80,10 +83,14 @@ getStore().then(async (store) => {
     });
 });
 
-listen("window-unminimize", (event) => {
-    sourceText.value = event.payload;
-    translate();
-});
+watch(
+    () => defaultSourceText,
+    (newText) => {
+        sourceText.value = newText;
+        translate();
+    },
+    { immediate: true }
+);
 </script>
 
 <template>

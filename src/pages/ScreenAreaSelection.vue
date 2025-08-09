@@ -3,6 +3,8 @@ import { invoke, convertFileSrc } from "@tauri-apps/api/core";
 import { currentMonitor, getCurrentWindow, Window } from "@tauri-apps/api/window";
 import { appCacheDir } from "@tauri-apps/api/path";
 import { reactive, ref, useTemplateRef } from "vue";
+import { OCRClient } from "tesseract-wasm";
+import { gotoTranslation } from "../router/main.js";
 
 const imgUrl = ref("");
 
@@ -63,16 +65,29 @@ async function hnadleMouseUp() {
         height: Math.round(selectionBox.height * ratio),
     });
 
-    const window = await getCurrentWindow();
-    window.close();
+    const ocr = new OCRClient();
+
+    const img = document.createElement("img");
+    img.src = convertFileSrc(`${await appCacheDir()}/screen_capture_partial.png`);
+    img.crossOrigin = "anonymous";
+    img.addEventListener("load", async () => {
+        const bitmap = await createImageBitmap(img);
+        await ocr.loadModel("/tesseract/tessdata/jpn.traineddata");
+        await ocr.loadImage(bitmap);
+
+        await invoke("go_to_translation", { text: await ocr.getText() });
+
+        const window = await getCurrentWindow();
+        window.close();
+    });
 }
 </script>
 
 <template>
     <div
-        @mousedown="handleMouseDown"
-        @mousemove="handleMouseMove"
-        @mouseup="hnadleMouseUp"
+        @mousedown.left="handleMouseDown"
+        @mousemove.left="handleMouseMove"
+        @mouseup.left="hnadleMouseUp"
         class="screen-area-selection-page-container"
     >
         <img :src="imgUrl" alt="screenshot" class="screenshot" />

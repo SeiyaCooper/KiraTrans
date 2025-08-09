@@ -1,22 +1,9 @@
 <script setup>
-import { OCRClient } from "tesseract-wasm";
 import { ref, useTemplateRef } from "vue";
 import { invoke } from "@tauri-apps/api/core";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-
-// const recognizedText = ref("");
-
-/* async function handleImageSelected(e) {
-    const bitmap = await createImageBitmap(e.target.files[0]);
-    const ocr = new OCRClient();
-
-    await ocr.loadModel("/tesseract/tessdata/jpn.traineddata");
-    await ocr.loadImage(bitmap);
-
-    recognizedText.value = await ocr.getText();
-} */
 
 const imageEl = useTemplateRef("screen-seleted");
 

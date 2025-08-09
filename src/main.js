@@ -2,7 +2,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import i18n from "./i18n/main.js";
 import tinycolor from "tinycolor2";
-import router from "./router/main.js";
+import { default as router, gotoTranslation } from "./router/main.js";
+import { listen } from "@tauri-apps/api/event";
 
 const COLORS = {
     prime: "#fe63a1",
@@ -37,3 +38,7 @@ const app = createApp(App);
 app.use(router);
 app.use(i18n);
 app.mount(document.body);
+
+listen("window-unminimize", (event) => {
+    gotoTranslation(event.payload);
+});

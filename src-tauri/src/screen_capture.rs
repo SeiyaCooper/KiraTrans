@@ -95,3 +95,9 @@ pub async fn start_screen_area_selection(app_handle: tauri::AppHandle) {
         panic!("Screen area selection is not implemented for mobile plantforms yet")
     }
 }
+
+use tauri::Emitter;
+#[tauri::command]
+pub fn go_to_translation(app_handle: tauri::AppHandle, text: String) {
+    app_handle.emit("window-unminimize", text).unwrap();
+}

@@ -10,7 +10,15 @@ import ScreenAreaSelection from "../pages/ScreenAreaSelection.vue";
 const routes = [
     { path: "/", redirect: "/translation" },
 
-    { path: "/translation", component: Translation },
+    {
+        path: "/translation",
+        component: Translation,
+        props: (route) => {
+            return {
+                defaultSourceText: route.query.defaultSourceText,
+            };
+        },
+    },
 
     { path: "/ocr", component: OCR },
 
@@ -22,4 +30,9 @@ const routes = [
     { path: "/settings/common", component: CommonSettings },
 ];
 
-export default createRouter({ mode: "history", history: createWebHistory(), routes });
+const router = createRouter({ mode: "history", history: createWebHistory(), routes });
+export default router;
+
+export function gotoTranslation(text) {
+    router.push({ path: "/translation", query: { defaultSourceText: text } });
+}

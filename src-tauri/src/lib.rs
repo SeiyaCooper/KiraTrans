@@ -1,7 +1,7 @@
 mod screen_capture;
 
 use crate::screen_capture::{
-    capture_full_screen, capture_partial_screen, start_screen_area_selection,
+    capture_full_screen, capture_partial_screen, go_to_translation, start_screen_area_selection,
 };
 
 #[cfg(desktop)]
@@ -25,7 +25,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             capture_full_screen,
             capture_partial_screen,
-            start_screen_area_selection
+            start_screen_area_selection,
+            go_to_translation
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
