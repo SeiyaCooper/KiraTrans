@@ -1,3 +1,9 @@
+mod screen_capture;
+
+use crate::screen_capture::{
+    capture_full_screen, capture_partial_screen, start_screen_area_selection,
+};
+
 #[cfg(desktop)]
 use tauri::{AppHandle, Manager};
 
@@ -16,6 +22,11 @@ pub fn run() {
     let mut builder = tauri::Builder::default();
 
     builder = builder
+        .invoke_handler(tauri::generate_handler![
+            capture_full_screen,
+            capture_partial_screen,
+            start_screen_area_selection
+        ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {
             if cfg!(debug_assertions) {

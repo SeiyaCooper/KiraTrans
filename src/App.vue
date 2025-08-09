@@ -1,13 +1,12 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import { Languages, Settings } from "lucide-vue-next";
+import { Languages, ScanText, Settings } from "lucide-vue-next";
 import { computed } from "vue";
 import { RouterView, RouterLink, useRoute } from "vue-router";
 
 const route = useRoute();
-const showNav = computed(() => {
-    return route.path === "/translation" || route.path === "/settings";
-});
+const firstClassPages = new Set(["/translation", "/settings", "/ocr"]);
+const showNav = computed(() => firstClassPages.has(route.path));
 </script>
 
 <template>
@@ -22,6 +21,10 @@ const showNav = computed(() => {
             <RouterLink to="/translation" class="nav-btn" exact-active-class="selected">
                 <Languages class="icon"></Languages>
                 <span class="nav-btn-text">{{ $t("pages.translation") }}</span>
+            </RouterLink>
+            <RouterLink to="/ocr" class="nav-btn" exact-active-class="selected">
+                <ScanText class="icon"></ScanText>
+                <span class="nav-btn-text">{{ $t("pages.ocr") }}</span>
             </RouterLink>
             <RouterLink to="/settings" class="nav-btn" exact-active-class="selected">
                 <Settings class="icon"></Settings>

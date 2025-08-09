@@ -21,7 +21,26 @@
             }
         ],
         "security": {
-            "csp": null
+            "csp": null,
+            "capabilities": [
+                {
+                    "identifier": "screen-area-selection",
+                    "windows": ["screen-area-selection"],
+                    "permissions": [
+                        "core:path:default",
+                        "core:window:allow-show",
+                        "core:window:allow-close",
+                        "core:window:allow-unminimize",
+                        "core:window:allow-get-all-windows"
+                    ]
+                },
+                "default",
+                "desktop"
+            ],
+            "assetProtocol": {
+                "enable": true,
+                "scope": ["$APPCACHE/*"]
+            }
         }
     },
     "bundle": {

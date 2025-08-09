@@ -13,6 +13,7 @@ export default createI18n({
                     common: "应用设置",
                     theme: "主题设置",
                 },
+                ocr: "OCR",
                 translation: "翻译",
             },
             apis: {
@@ -28,6 +29,9 @@ export default createI18n({
                 "zh-cn": "中文（简体）",
                 en: "英语",
                 ja: "日语",
+            },
+            dialogs: {
+                "screen-area-selection": "选择屏幕区域",
             },
         },
         en: {
