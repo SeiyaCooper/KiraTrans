@@ -21,7 +21,7 @@ function attachColorMap(name, color) {
     root.style.setProperty(`--${name}`, color.toString());
 
     for (let i = 0; i < 4; i++) {
-        root.style.setProperty(`--${name}-light-${i}`, color.brighten(5 * (i + 1)).toString());
+        root.style.setProperty(`--${name}-light-${i}`, color.lighten(5 * (i + 1)).toString());
         root.style.setProperty(`--${name}-dark-${i}`, color.darken(5 * (i + 1)).toString());
         root.style.setProperty(
             `--${name}-transparent-${i}`,

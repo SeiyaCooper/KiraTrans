@@ -26,6 +26,7 @@ export default createI18n({
                 error: "错误",
             },
             languages: {
+                auto: "自动检测",
                 "zh-cn": "中文（简体）",
                 en: "英语",
                 ja: "日语",

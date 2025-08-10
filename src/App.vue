@@ -1,5 +1,4 @@
 <script setup>
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 import { Languages, ScanText, Settings } from "lucide-vue-next";
 import { computed } from "vue";
 import { RouterView, RouterLink, useRoute } from "vue-router";
