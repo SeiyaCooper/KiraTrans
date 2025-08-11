@@ -1,7 +1,7 @@
 {
     "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
     "productName": "KiraTrans",
-    "version": "0.0.1-dev.1",
+    "version": "0.0.1",
     "identifier": "com.seiyacooper.kiratrans",
     "build": {
         "frontendDist": "../src/dist/",
