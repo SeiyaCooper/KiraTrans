@@ -3,7 +3,7 @@ name: Build for Release
 on:
   workflow_dispatch:
   push:
-    tags: ["release-v**"]
+    tags: ["release-v*"]
 
 jobs:
   build-tauri:
