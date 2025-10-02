@@ -18,8 +18,10 @@ export default createI18n({
             },
             apis: {
                 chooseNotice: "选择翻译 API",
-                setApiKeyNotice: "输入翻译 API Key",
+                setApiKeyNotice: "输入翻译 API Key (Secret Key)",
+                setAppIdNotice: "输入翻译 APP Id (Secret Id)",
                 niutrans: "小牛翻译",
+                tencent: "腾讯翻译",
             },
             common: {
                 submit: "确认",

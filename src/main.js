@@ -4,17 +4,9 @@ import i18n from "./i18n/main.js";
 import tinycolor from "tinycolor2";
 import { default as router, gotoTranslation } from "./router/main.js";
 import { listen } from "@tauri-apps/api/event";
+import { getStore } from "./services/store.js";
 
-const COLORS = {
-    prime: "#fe63a1",
-    "content-common": "#f0f8ff",
-    background: "#121215",
-};
-
-for (const [name, color] of Object.entries(COLORS)) {
-    attachColorMap(name, tinycolor(color));
-}
-
+// Initialize CSS variables
 function attachColorMap(name, color) {
     const root = document.documentElement;
 
@@ -33,12 +25,28 @@ function attachColorMap(name, color) {
     }
 }
 
-const app = createApp(App);
+const COLORS = {
+    prime: "#fe63a1",
+    "content-common": "#f0f8ff",
+    background: "#121215",
+};
 
-app.use(router);
-app.use(i18n);
-app.mount(document.body);
+for (const [name, color] of Object.entries(COLORS)) {
+    attachColorMap(name, tinycolor(color));
+}
 
-listen("window-unminimize", (event) => {
-    gotoTranslation(event.payload);
+// Provide default values for the settings
+getStore().then(async (store) => {
+    if ((await store.get("translate-api")) === undefined) await store.set("translate-api", "niutrans");
+
+    // Create App
+    const app = createApp(App);
+
+    app.use(router);
+    app.use(i18n);
+    app.mount(document.body);
+
+    listen("window-unminimize", (event) => {
+        gotoTranslation(event.payload);
+    });
 });

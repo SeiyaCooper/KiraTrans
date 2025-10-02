@@ -1,8 +1,10 @@
+mod http_request;
 mod screen_capture;
 
 use crate::screen_capture::{
     capture_full_screen, capture_partial_screen, go_to_translation, start_screen_area_selection,
 };
+use http_request::send_post_request_with_json;
 
 #[cfg(desktop)]
 use tauri::{AppHandle, Manager};
@@ -26,7 +28,8 @@ pub fn run() {
             capture_full_screen,
             capture_partial_screen,
             start_screen_area_selection,
-            go_to_translation
+            go_to_translation,
+            send_post_request_with_json,
         ])
         .plugin(tauri_plugin_store::Builder::default().build())
         .setup(|app| {

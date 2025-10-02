@@ -1,0 +1,7 @@
+// This file is for developers
+
+translate-api
+translate-api-key
+translate-app-id
+source-language  // language code of source language
+target-language  // language code of target language

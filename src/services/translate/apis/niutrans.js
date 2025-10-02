@@ -1,11 +1,11 @@
 import LANGUAGES from "../languages.js";
+import CryptoJS from "crypto-js";
 
 const niutrans = {
-    translate: async (sourceText, apikey, from, to) => {
+    translate: async ({ sourceText, apiKey, from, to }) => {
         if (sourceText.trim() === "") return sourceText;
 
         const url = "https://api.niutrans.com/v2/text/translate";
-        const CryptoJS = await import("crypto-js");
 
         const params = {
             from: niutrans.getLanguageTag(from),
@@ -14,7 +14,7 @@ const niutrans = {
             srcText: sourceText,
             timestamp: Math.floor(+new Date() / 1000),
         };
-        const paramsWithApiKey = { ...params, apikey };
+        const paramsWithApiKey = { ...params, apikey: apiKey };
         const sortedKeys = Object.keys(paramsWithApiKey).sort();
 
         let paramArr = [];
@@ -24,16 +24,16 @@ const niutrans = {
 
         params.authStr = CryptoJS.MD5(CryptoJS.enc.Utf8.parse(paramArr.join("&"))).toString();
 
-        const responce = await fetch(url, {
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
             body: new URLSearchParams(params),
         });
-        const responceContent = await responce.json();
-        if (responceContent.errorMsg) throw new Error(`${responceContent.errorMsg}`);
-        return responceContent;
+        const responseContent = await response.json();
+        if (responseContent.errorMsg) throw new Error(`${responseContent.errorMsg}`);
+        return responseContent.tgtText;
     },
 
     /**
@@ -57,6 +57,7 @@ const niutrans = {
     },
 
     supportLanguageDetection: true,
+    needAppId: false,
 };
 
 export default niutrans;

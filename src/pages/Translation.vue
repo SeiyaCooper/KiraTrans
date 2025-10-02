@@ -3,7 +3,7 @@ import * as TranslateService from "../services/translate/index.js";
 import { getStore } from "../services/store.js";
 import { ref, useTemplateRef, watch } from "vue";
 import Toast from "../components/Toast.vue";
-import LanguageSelector from "../components/LanguageSelector.vue";
+import Selector from "../components/Selector.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -23,6 +23,7 @@ const targetLanguage = ref(null);
 const targetLanguageSelector = useTemplateRef("target-language-selector");
 
 let translateApi = undefined;
+let appId = undefined;
 let apiKey = undefined;
 
 let debouncer = undefined;
@@ -32,23 +33,25 @@ const translate = () => {
 
     debouncer = setTimeout(async () => {
         try {
-            translatedText.value = (
-                await TranslateService[translateApi].translate(
-                    sourceText.value,
-                    apiKey,
-                    sourceLanguage.value.code,
-                    targetLanguage.value.code
-                )
-            ).tgtText;
+            translatedText.value = await TranslateService[translateApi].translate({
+                sourceText: sourceText.value,
+                apiKey,
+                appId,
+                from: sourceLanguage.value.code,
+                to: targetLanguage.value.code,
+            });
         } catch (error) {
+            console.log(error);
             toastRef.value?.openToast(error.message, { title: t("common.error"), durationSec: 3 });
         }
     }, 500);
 };
 
+// Initialize from local store
 getStore().then(async (store) => {
     translateApi = await store.get("translate-api");
     apiKey = await store.get("translate-api-key");
+    appId = await store.get("translate-app-id");
 
     handleInput.value = translate;
 
@@ -71,7 +74,6 @@ getStore().then(async (store) => {
         } else {
             sourceLanguage.value = storedLanguage;
         }
-        sourceLanguageSelector.value?.select(sourceLanguage.value);
     });
     store.get("target-language").then((lang) => {
         const storedLanguage = supportTargetLanguages.value.find((langObj) => langObj.code === lang);
@@ -80,18 +82,13 @@ getStore().then(async (store) => {
         } else {
             targetLanguage.value = storedLanguage;
         }
-        targetLanguageSelector.value?.select(targetLanguage.value);
     });
 
     handleSourceLangChange.value = async (lang) => {
-        if (sourceLanguage.value.code === lang) return;
-        sourceLanguage.value = lang;
         store.set("source-language", lang.code);
         translate();
     };
     handleTargetLangChange.value = async (lang) => {
-        if (targetLanguage.value.code === lang.code) return;
-        targetLanguage.value = lang;
         store.set("target-language", lang.code);
         translate();
     };
@@ -106,6 +103,14 @@ watch(
     () => defaultSourceText,
     (newText) => {
         sourceText.value = newText;
+
+        if (supportSourceLanguages.value) {
+            const languageDetection = supportSourceLanguages.value.find((langObj) => langObj.code === "auto");
+            if (languageDetection !== undefined) {
+                sourceLanguage.value = languageDetection;
+            }
+        }
+
         translate();
     },
     { immediate: true }
@@ -115,24 +120,24 @@ watch(
 <template>
     <div class="translation-page-container">
         <div class="text-group">
-            <LanguageSelector
-                :languages="supportSourceLanguages"
-                :selected="sourceLanguage"
+            <Selector
+                :options="supportSourceLanguages"
+                v-model="sourceLanguage"
                 @change="handleSourceLangChange"
                 ref="source-language-selector"
                 class="language-selector"
-            ></LanguageSelector>
+            ></Selector>
             <textarea v-model="sourceText" @input="handleInput" class="source-text text-view"></textarea>
         </div>
 
         <div class="text-group">
-            <LanguageSelector
-                :languages="supportTargetLanguages"
-                :selected="targetLanguage"
+            <Selector
+                :options="supportTargetLanguages"
+                v-model="targetLanguage"
                 @change="handleTargetLangChange"
                 ref="target-language-selector"
                 class="language-selector"
-            ></LanguageSelector>
+            ></Selector>
             <pre class="translated-text text-view">{{ translatedText }}</pre>
         </div>
 

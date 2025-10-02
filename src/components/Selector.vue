@@ -5,37 +5,36 @@ import { reactive, ref, watch } from "vue";
 const { t } = useI18n();
 
 const props = defineProps({
-    languages: Array,
-    selected: Object,
+    options: Array,
 });
-const selectedRef = ref(props.selected);
+const selected = defineModel();
 
 const emit = defineEmits(["change"]);
 function handleSelect() {
-    emit("change", selectedRef.value);
+    emit("change", selected.value);
 }
 
-function select(language) {
-    selectedRef.value = language;
+function select(option) {
+    selected.value = option;
 }
 defineExpose({ select });
 </script>
 
 <template>
-    <select v-model="selectedRef" @change="handleSelect" class="language-selector">
+    <select v-model="selected" @change="handleSelect" class="selector">
         <option
-            v-for="language in props.languages"
-            :value="language"
-            :class="['language-selector-option']"
-            :disabled="language === selectedRef"
+            v-for="option in props.options"
+            :value="option"
+            :class="['selector-option']"
+            :disabled="option === selected"
         >
-            {{ language.label }}
+            {{ option.label }}
         </option>
     </select>
 </template>
 
 <style scoped>
-.language-selector {
+.selector {
     background-color: var(--background-light-1);
     color: var(--prime);
     box-sizing: border-box;
@@ -44,15 +43,15 @@ defineExpose({ select });
     border-radius: 5px;
 }
 
-.language-selector:hover {
+.selector:hover {
     border: 1px solid var(--prime);
 }
 
-.language-selector-option {
+.selector-option {
     color: var(--content-common);
 }
 
-.language-selector-option[disabled] {
+.selector-option[disabled] {
     color: var(--background-light-3);
 }
 </style>
